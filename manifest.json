@@ -1,10 +1,12 @@
 {
   "name": "Affirm.",
   "short_name": "Affirm",
-  "start_url": ".",
+  "start_url": "./?source=pwa",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#0b0d27",
+  "scope": "./",
+  "background_color": "#020317",
+  "theme_color": "#071026",
+  "description": "Affirm. Daily affirmations by DRACO iNC Techs",
   "icons": [
     {
       "src": "icons/affirm-glass-192.png",

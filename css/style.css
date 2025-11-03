@@ -1,121 +1,83 @@
-/* Affirm v2.2 — iPhone-like, Responsive, Galaxy Theme */
 
-:root {
-  --bg-light: #fdfdfd;
-  --bg-dark: #0b0d27;
-  --text-light: #111;
-  --text-dark: #f5f5f5;
-  --accent: #ffb347;
-  --blur-bg: rgba(255, 255, 255, 0.15);
-  --glass: rgba(255, 255, 255, 0.1);
-  --radius: 16px;
-  --transition: all 0.3s ease;
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+/* Affirm v2.3 — Preserves v2.1 behavior, adds safe starfield + responsive iPhone-like UI */
+
+/* Reset */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: radial-gradient(circle at 30% 30%, #1a1a40 0%, #000010 90%);
+  color:#e6eef8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  overflow-y:auto;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  background: radial-gradient(circle at 30% 30%, #1a1a40, #000010 90%);
-  color: var(--text-dark);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+/* Starfield via low-cost SVG pattern in pseudo-element */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4'><circle cx='1' cy='1' r='0.7' fill='rgba(255,255,255,0.9)' opacity='0.6'/></svg>");
+  background-repeat:repeat;
+  background-size:6px 6px;
+  opacity:0.12;
+  z-index:0;
 }
 
-/* Starfield background */
-body::before {
-  content: "";
-  position: fixed;
-  width: 200%;
-  height: 200%;
-  background: transparent url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%'><circle cx='1' cy='1' r='1' fill='white' opacity='0.5'/></svg>") repeat;
-  background-size: 3px 3px;
-  animation: drift 100s linear infinite;
-  top: -50%;
-  left: -50%;
-  z-index: 0;
-  opacity: 0.3;
-}
-
-@keyframes drift {
-  from { transform: translate(0, 0); }
-  to { transform: translate(50%, 50%); }
-}
-
-.app {
-  position: relative;
-  z-index: 1;
-  width: 90%;
-  max-width: 480px;
-  padding: 2rem;
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  border-radius: var(--radius);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-}
+/* App container (preserve structure) */
+.app{position:relative;z-index:1;width:100%;max-width:520px;padding:14px;border-radius:34px;background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.02);box-shadow:0 24px 60px rgba(2,6,23,0.6)}
 
 /* Splash */
-.splash {
-  font-size: 2rem;
-  opacity: 0;
-  animation: fadeIn 2.5s ease forwards;
-}
-.splash span {
-  display: block;
-  font-size: 0.9rem;
-  color: #aaa;
-  margin-top: 0.4rem;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:9999;background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.65))}
+.splash .logo-large{font-size:48px;font-weight:800;color:white;letter-spacing:0.5px}
+.splash .logo-sub{font-size:14px;color:rgba(255,255,255,0.85);margin-top:8px}
+.splash-center{display:flex;flex-direction:column;align-items:center;}
 
-/* Affirmation card */
-h1 {
-  font-size: 1.5rem;
-  margin-top: 1rem;
-}
-button, textarea {
-  border: none;
-  border-radius: var(--radius);
-  padding: 0.6rem 1rem;
-  margin: 0.3rem;
-  background: var(--accent);
-  color: #fff;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: var(--transition);
-}
-button:hover { filter: brightness(1.1); }
-textarea {
-  width: 90%;
-  min-height: 60px;
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  resize: none;
-}
+/* topbar & title */
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:6px 8px}
+.title{font-weight:800;font-size:1.05rem}
+.date-time{font-size:0.86rem;color:rgba(255,255,255,0.75)}
 
-/* Banner sections */
-.analytics-banner, .install-banner {
-  margin-top: 1rem;
-  background: var(--blur-bg);
-  border-radius: var(--radius);
-  padding: 1rem;
-  font-size: 0.9rem;
-  backdrop-filter: blur(10px);
-}
-.analytics-banner button, .install-banner button {
-  background: #333;
-  color: #fff;
-  margin: 0.4rem;
-}
+/* theme buttons */
+.theme-switch{display:flex;gap:6px}
+.theme-btn{background:transparent;border:1px solid rgba(255,255,255,0.03);padding:6px 8px;border-radius:10px;color:rgba(255,255,255,0.85);cursor:pointer;font-weight:700}
+.theme-btn[aria-pressed="true"]{background:linear-gradient(90deg,#6c8cff,#6ce2b6);color:#05223a;border-color:transparent}
 
-@media (max-width: 480px) {
-  h1 { font-size: 1.3rem; }
-  button, textarea { font-size: 0.9rem; }
+/* card */
+.card{margin-top:8px;background:rgba(255,255,255,0.02);padding:18px;border-radius:20px}
+.affirmation-container{min-height:120px;display:flex;align-items:center;justify-content:center;padding:4px 8px}
+.affirmation-content{text-align:center;font-size:1.15rem;line-height:1.4;padding:12px;color:inherit;transition:opacity .35s,transform .35s}
+
+/* controls */
+.controls{display:flex;gap:8px;justify-content:center;margin-top:12px}
+button{border:0;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700}
+.primary{background:linear-gradient(90deg,#4d70ff,#6c8cff);color:white;box-shadow:0 8px 20px rgba(83,102,255,0.12)}
+.ghost{background:transparent;color:rgba(255,255,255,0.8);border:1px solid rgba(255,255,255,0.03)}
+.accent{background:linear-gradient(90deg,#6ce2b6,#71a9ff);color:#05223a}
+
+/* mini controls */
+.mini-controls{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.link{background:transparent;color:rgba(255,255,255,0.8);font-weight:700}
+
+/* form */
+.hidden{display:none}
+#addForm textarea{width:100%;resize:vertical;border-radius:12px;border:1px solid rgba(255,255,255,0.03);padding:12px;background:rgba(255,255,255,0.02);color:inherit}
+.form-actions{display:flex;gap:8px;margin-top:8px;justify-content:flex-end}
+
+/* saved list */
+.saved-list{margin-top:12px;display:flex;flex-direction:column;gap:8px;color:rgba(255,255,255,0.75)}
+.saved-list .item{background:rgba(255,255,255,0.02);padding:10px;border-radius:12px;display:flex;justify-content:space-between;align-items:center}
+
+/* consent & install */
+.consent{position:fixed;left:16px;right:16px;bottom:18px;background:rgba(0,0,0,0.6);color:white;padding:12px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;backdrop-filter:blur(6px)}
+.install-prompt{position:fixed;left:16px;right:16px;bottom:18px;background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;color:rgba(255,255,255,0.9)}
+
+/* responsive tweaks */
+@media (max-width:420px){
+  .splash .logo-large{font-size:36px}
+  .affirmation-content{font-size:1.05rem}
+  .app{padding:12px;border-radius:28px}
 }

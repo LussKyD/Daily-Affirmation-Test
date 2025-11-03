@@ -1,22 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Affirm.</title>
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="./css/style.css">
+<meta name="description" content="Affirm. — Daily affirmations by DRACO iNC Techs. Offline-ready PWA." />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/affirm-glass-192.png" />
+<link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-<div class="app">
-  <div class="splash">Affirm.<span>By DRACO iNC Techs</span></div>
-  <h1>Daily Affirmation</h1>
-  <div class="theme-toggle"><button>Auto</button><button>Light</button><button>Dark</button></div>
-  <button>AI ✨</button>
-  <textarea placeholder="Write an affirmation..."></textarea>
-  <div class="analytics-banner">We use anonymous analytics to improve Affirm. Allow basic analytics?<br><button>Accept</button><button>Decline</button></div>
-  <div class="install-banner">Install Affirm for quick access.<br><button>Install</button><button>No thanks</button></div>
+<!-- Splash -->
+<div id="splash" class="splash">
+  <canvas id="starfield" class="starfield"></canvas>
+  <div class="splash-center">
+    <div class="logo-large">Affirm.</div>
+    <div class="logo-sub">By DRACO iNC Techs</div>
+  </div>
 </div>
-<script src="./js/app.js"></script>
+
+<main id="app" class="app hidden" role="main" aria-live="polite" data-theme="auto">
+  <div class="iphone-shell">
+    <header class="topbar" role="banner">
+      <div class="left">
+        <div class="title">Affirm.</div>
+        <div class="date-time" id="dateTime"></div>
+      </div>
+      <div class="right">
+        <div class="theme-switch" title="Theme">
+          <button id="themeAuto" class="theme-btn" data-mode="auto" aria-pressed="true">Auto</button>
+          <button id="themeLight" class="theme-btn" data-mode="light">Light</button>
+          <button id="themeDark" class="theme-btn" data-mode="dark">Dark</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="card" id="affirmationCard" aria-labelledby="affirmationHeading">
+      <h1 id="affirmationHeading" class="sr-only">Daily Affirmation</h1>
+
+      <div class="affirmation-container">
+        <div class="affirmation-content" id="affirmationText" tabindex="0" aria-live="polite">Tap <strong>AI ✨</strong> to generate an affirmation.</div>
+      </div>
+
+      <div class="controls">
+        <button id="btn-prev" class="ghost">◀</button>
+        <button id="btn-next" class="primary">Next</button>
+        <button id="btn-generate" class="accent">AI ✨</button>
+      </div>
+
+      <div class="mini-controls">
+        <button id="btn-add-toggle" class="link">+ Add</button>
+        <button id="btn-save" class="link">Save</button>
+        <button id="btn-random" class="link">Surprise</button>
+      </div>
+
+      <form id="addForm" class="hidden" aria-hidden="true">
+        <label for="newAffirmation" class="visually-hidden">New affirmation</label>
+        <textarea id="newAffirmation" placeholder="Write an affirmation..." rows="3" required></textarea>
+        <div class="form-actions">
+          <button type="submit" class="primary">Add</button>
+          <button type="button" id="btn-cancel" class="ghost">Cancel</button>
+        </div>
+      </form>
+
+      <div id="savedList" class="saved-list" aria-live="polite"></div>
+
+    </section>
+
+    <footer class="footer">
+      <div id="weather" class="weather"></div>
+      <div class="note">Offline-ready • PWA</div>
+    </footer>
+  </div>
+
+  <div id="consentBanner" class="consent hidden" role="dialog" aria-hidden="true">
+    <div class="consent-text">
+      We use anonymous analytics to improve Affirm. Allow basic analytics?
+    </div>
+    <div class="consent-actions">
+      <button id="consentAccept" class="primary">Accept</button>
+      <button id="consentDecline" class="ghost">Decline</button>
+    </div>
+  </div>
+
+  <div id="installPrompt" class="install-prompt hidden" role="dialog" aria-hidden="true">
+    <p>Install Affirm for quick access.</p>
+    <div class="install-actions">
+      <button id="btn-install" class="primary">Install</button>
+      <button id="btn-dismiss-install" class="ghost">No thanks</button>
+    </div>
+  </div>
+</main>
+
+<script src="js/app.js" defer></script>
+<script src="js/analytics.js" defer></script>
 </body>
 </html>
