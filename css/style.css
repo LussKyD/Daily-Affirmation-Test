@@ -1,5 +1,5 @@
 
-/* Affirm v2.3 — Preserves v2.1 behavior, adds safe starfield + responsive iPhone-like UI */
+/* Affirm v2.4 — preserves v2.3 behavior, fixes overlays, responsive theme toggles, shooting stars */
 
 /* Reset */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -15,38 +15,57 @@ body{
   overflow-y:auto;
 }
 
-/* Starfield via low-cost SVG pattern in pseudo-element */
+/* Starfield pseudo-bg (low-cost) */
 body::before{
   content:"";
   position:fixed;
   inset:0;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4'><circle cx='1' cy='1' r='0.7' fill='rgba(255,255,255,0.9)' opacity='0.6'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4'><circle cx='1' cy='1' r='0.7' fill='white' opacity='0.9'/></svg>");
   background-repeat:repeat;
   background-size:6px 6px;
   opacity:0.12;
   z-index:0;
 }
 
-/* App container (preserve structure) */
+/* Shooting star container (absolute, above starfield) */
+#splash{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.splash .splash-center{pointer-events:none;z-index:9999;text-align:center;color:#fff}
+.logo-large{font-size:48px;font-weight:800}
+.logo-sub{font-size:14px;margin-top:8px;opacity:0.9}
+
+/* shooting star style */
+.shooting-star{
+  position:fixed;
+  width:2px;
+  height:2px;
+  background:linear-gradient(90deg, rgba(255,255,255,1), rgba(255,255,255,0.1));
+  box-shadow:0 0 8px rgba(255,255,255,0.8);
+  transform:rotate(-30deg);
+  z-index:10000;
+  pointer-events:none;
+  will-change:transform,opacity;
+}
+
+/* App container */
 .app{position:relative;z-index:1;width:100%;max-width:520px;padding:14px;border-radius:34px;background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.02);box-shadow:0 24px 60px rgba(2,6,23,0.6)}
 
-/* Splash */
-.splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:9999;background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.65))}
-.splash .logo-large{font-size:48px;font-weight:800;color:white;letter-spacing:0.5px}
-.splash .logo-sub{font-size:14px;color:rgba(255,255,255,0.85);margin-top:8px}
-.splash-center{display:flex;flex-direction:column;align-items:center;}
-
-/* topbar & title */
+/* topbar */
 .topbar{display:flex;justify-content:space-between;align-items:center;padding:6px 8px}
 .title{font-weight:800;font-size:1.05rem}
 .date-time{font-size:0.86rem;color:rgba(255,255,255,0.75)}
 
-/* theme buttons */
+/* theme switch responsive */
 .theme-switch{display:flex;gap:6px}
 .theme-btn{background:transparent;border:1px solid rgba(255,255,255,0.03);padding:6px 8px;border-radius:10px;color:rgba(255,255,255,0.85);cursor:pointer;font-weight:700}
 .theme-btn[aria-pressed="true"]{background:linear-gradient(90deg,#6c8cff,#6ce2b6);color:#05223a;border-color:transparent}
 
-/* card */
+/* make theme buttons stack on narrow screens */
+@media (max-width:420px){
+  .theme-switch{flex-direction:row;gap:6px}
+  .theme-btn{padding:8px 10px;font-size:0.86rem}
+}
+
+/* card and content */
 .card{margin-top:8px;background:rgba(255,255,255,0.02);padding:18px;border-radius:20px}
 .affirmation-container{min-height:120px;display:flex;align-items:center;justify-content:center;padding:4px 8px}
 .affirmation-content{text-align:center;font-size:1.15rem;line-height:1.4;padding:12px;color:inherit;transition:opacity .35s,transform .35s}
@@ -71,9 +90,13 @@ button{border:0;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:
 .saved-list{margin-top:12px;display:flex;flex-direction:column;gap:8px;color:rgba(255,255,255,0.75)}
 .saved-list .item{background:rgba(255,255,255,0.02);padding:10px;border-radius:12px;display:flex;justify-content:space-between;align-items:center}
 
-/* consent & install */
-.consent{position:fixed;left:16px;right:16px;bottom:18px;background:rgba(0,0,0,0.6);color:white;padding:12px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;backdrop-filter:blur(6px)}
-.install-prompt{position:fixed;left:16px;right:16px;bottom:18px;background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;color:rgba(255,255,255,0.9)}
+/* consent & install prompts: ensure installPrompt overlays consentBanner */
+/* consent lower z-index so install appears above it when both visible */
+.consent{position:fixed;left:16px;right:16px;bottom:18px;background:rgba(0,0,0,0.6);color:white;padding:12px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;backdrop-filter:blur(6px);z-index:1001}
+.install-prompt{position:fixed;left:16px;right:16px;bottom:18px;background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;color:rgba(255,255,255,0.9);z-index:1002}
+
+/* subtle transitions */
+.consent, .install-prompt{transition:transform .22s ease,opacity .22s ease}
 
 /* responsive tweaks */
 @media (max-width:420px){

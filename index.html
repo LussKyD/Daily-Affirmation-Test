@@ -6,14 +6,17 @@
 <title>Affirm.</title>
 <meta name="description" content="Affirm. — Daily affirmations by DRACO iNC Techs. Offline-ready PWA." />
 <link rel="manifest" href="manifest.json" />
-<link rel="icon" href="icons/affirm-glass-192.png" />
+<!-- Theme-aware icons: browser will pick appropriate one when supported -->
+<link rel="icon" href="icons/affirm-glass-192.png" sizes="192x192">
+<link rel="icon" href="icons/affirm-solar-192.png" sizes="192x192" media="(prefers-color-scheme: light)">
+<link rel="icon" href="icons/affirm-midnight-192.png" sizes="192x192" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 <!-- Splash -->
-<div id="splash" class="splash">
-  <canvas id="starfield" class="starfield"></canvas>
-  <div class="splash-center">
+<div id="splash" class="splash" aria-hidden="false">
+  <canvas id="starfield" class="starfield" aria-hidden="true"></canvas>
+  <div class="splash-center" aria-hidden="true">
     <div class="logo-large">Affirm.</div>
     <div class="logo-sub">By DRACO iNC Techs</div>
   </div>
@@ -73,7 +76,7 @@
     </footer>
   </div>
 
-  <div id="consentBanner" class="consent hidden" role="dialog" aria-hidden="true">
+  <div id="consentBanner" class="consent" role="dialog" aria-hidden="true">
     <div class="consent-text">
       We use anonymous analytics to improve Affirm. Allow basic analytics?
     </div>
@@ -83,7 +86,7 @@
     </div>
   </div>
 
-  <div id="installPrompt" class="install-prompt hidden" role="dialog" aria-hidden="true">
+  <div id="installPrompt" class="install-prompt" role="dialog" aria-hidden="true">
     <p>Install Affirm for quick access.</p>
     <div class="install-actions">
       <button id="btn-install" class="primary">Install</button>

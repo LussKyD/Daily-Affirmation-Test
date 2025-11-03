@@ -1,6 +1,4 @@
-/* analytics.js - thin wrapper that listens to UI events and delegates to Analytics module */
 document.addEventListener('DOMContentLoaded', ()=> {
-  // basic hooks (safely check existence)
   const next = document.getElementById('btn-next');
   const gen = document.getElementById('btn-generate');
   const save = document.getElementById('btn-save');

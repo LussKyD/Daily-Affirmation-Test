@@ -9,6 +9,10 @@ const ASSETS = [
   './manifest.json',
   './icons/affirm-glass-192.png',
   './icons/affirm-glass-512.png',
+  './icons/affirm-solar-192.png',
+  './icons/affirm-solar-512.png',
+  './icons/affirm-midnight-192.png',
+  './icons/affirm-midnight-512.png'
 ];
 
 self.addEventListener('install', event => {
@@ -53,8 +57,6 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith(
-    fetch(req).then(res=>{
-      return res;
-    }).catch(()=> caches.match(req))
+    fetch(req).then(res=>{ return res; }).catch(()=> caches.match(req))
   );
 });
