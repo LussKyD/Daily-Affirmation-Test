@@ -4,16 +4,13 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Affirm.</title>
-<meta name="description" content="Affirm. — Daily affirmations by DRACO iNC Techs. Offline-ready PWA." />
 <link rel="manifest" href="manifest.json" />
-<!-- Theme-aware icons: browser will pick appropriate one when supported -->
 <link rel="icon" href="icons/affirm-glass-192.png" sizes="192x192">
 <link rel="icon" href="icons/affirm-solar-192.png" sizes="192x192" media="(prefers-color-scheme: light)">
 <link rel="icon" href="icons/affirm-midnight-192.png" sizes="192x192" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-<!-- Splash -->
 <div id="splash" class="splash" aria-hidden="false">
   <canvas id="starfield" class="starfield" aria-hidden="true"></canvas>
   <div class="splash-center" aria-hidden="true">
@@ -30,10 +27,10 @@
         <div class="date-time" id="dateTime"></div>
       </div>
       <div class="right">
-        <div class="theme-switch" title="Theme">
-          <button id="themeAuto" class="theme-btn" data-mode="auto" aria-pressed="true">Auto</button>
-          <button id="themeLight" class="theme-btn" data-mode="light">Light</button>
-          <button id="themeDark" class="theme-btn" data-mode="dark">Dark</button>
+        <div class="theme-switch" title="Theme" role="tablist" aria-label="Theme">
+          <button id="themeAuto" class="theme-btn" data-mode="auto" aria-pressed="true" role="tab">Auto</button>
+          <button id="themeLight" class="theme-btn" data-mode="light" role="tab">Light</button>
+          <button id="themeDark" class="theme-btn" data-mode="dark" role="tab">Dark</button>
         </div>
       </div>
     </header>
@@ -46,9 +43,9 @@
       </div>
 
       <div class="controls">
-        <button id="btn-prev" class="ghost">◀</button>
-        <button id="btn-next" class="primary">Next</button>
-        <button id="btn-generate" class="accent">AI ✨</button>
+        <button id="btn-prev" class="ghost" aria-label="Previous affirmation">◀</button>
+        <button id="btn-next" class="primary" aria-label="Next affirmation">Next</button>
+        <button id="btn-generate" class="accent" aria-label="Generate affirmation">AI ✨</button>
       </div>
 
       <div class="mini-controls">
