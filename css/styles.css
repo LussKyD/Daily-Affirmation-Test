@@ -1,3 +1,202 @@
-/* Affirm v2.1 styles - responsive, iPhone-like, splash with starfield */
+/* Affirm v2.2 – full responsive iPhone-like UI + galaxy background */
 
-/* ... (same as previous CSS) ... */
+/* === RESET === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: radial-gradient(ellipse at top, #0b0d27 0%, #000 70%);
+  color: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* === STARFIELD BACKGROUND === */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='white'/%3E%3C/svg%3E") repeat;
+  background-size: 2px 2px;
+  opacity: 0.15;
+  animation: twinkle 4s infinite alternate ease-in-out;
+  z-index: 0;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.1; }
+  100% { opacity: 0.3; }
+}
+
+/* === APP CONTAINER === */
+.app {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 420px;
+  padding: 2rem;
+  text-align: center;
+  animation: fadeIn 1.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === SPLASH TEXT === */
+.splash {
+  font-size: 1.4rem;
+  text-align: center;
+  color: #eaeaea;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.splash span {
+  display: block;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+/* === TITLE === */
+h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+/* === BUTTONS === */
+button {
+  font-size: 1rem;
+  padding: 0.6rem 1.2rem;
+  margin: 0.3rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #4f8cff, #6d5eff);
+  color: #fff;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.35);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* === TOGGLES === */
+.theme-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.theme-toggle button {
+  flex: 1;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* === TEXT AREA === */
+textarea {
+  width: 100%;
+  min-height: 80px;
+  margin: 0.8rem 0;
+  padding: 0.8rem;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+/* === ANALYTICS CONSENT === */
+.analytics-banner {
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+.analytics-banner button {
+  margin-top: 0.5rem;
+  background: rgba(255,255,255,0.2);
+}
+
+/* === INSTALL PROMPT === */
+.install-banner {
+  margin-top: 1.2rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  color: #ccc;
+}
+
+/* === DARK/LIGHT === */
+body.light {
+  background: linear-gradient(180deg, #f7f8fc 0%, #e0e0e0 100%);
+  color: #333;
+}
+
+body.light .app {
+  background: rgba(255,255,255,0.8);
+  color: #111;
+}
+
+body.light button {
+  background: linear-gradient(135deg, #007aff, #5856d6);
+}
+
+body.light textarea {
+  background: rgba(0,0,0,0.05);
+  color: #111;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  .app {
+    width: 95%;
+    padding: 1.5rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+  button {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+  textarea {
+    font-size: 0.9rem;
+  }
+}
