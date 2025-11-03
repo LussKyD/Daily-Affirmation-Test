@@ -6,25 +6,34 @@
   <meta name="description" content="Daily Affirmation Dashboard — minimal, offline-ready, uplifting." />
   <title>Daily Affirmation Dashboard</title>
 
-  <link rel="manifest" href="/manifest.json" />
+  <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0b1220" />
-  <link rel="icon" href="/icons/icon-192.png" />
+  <link rel="icon" href="icons/icon-192.png" />
 
-  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <main id="app" class="app" role="main" aria-live="polite">
+  <main id="app" class="app" role="main" aria-live="polite" data-theme="auto">
     <div class="iphone-shell">
       <header class="topbar" role="banner">
-        <div class="title">Affirmations</div>
-        <div class="date-time" id="dateTime" aria-hidden="false"></div>
+        <div class="left">
+          <div class="title">Affirmations</div>
+          <div class="date-time" id="dateTime" aria-hidden="false"></div>
+        </div>
+        <div class="right">
+          <div class="theme-switch" title="Theme">
+            <button id="themeAuto" class="theme-btn" data-mode="auto" aria-pressed="true">Auto</button>
+            <button id="themeLight" class="theme-btn" data-mode="light">Light</button>
+            <button id="themeDark" class="theme-btn" data-mode="dark">Dark</button>
+          </div>
+        </div>
       </header>
 
       <section class="card" id="affirmationCard" aria-labelledby="affirmationHeading">
         <h1 id="affirmationHeading" class="sr-only">Daily Affirmation</h1>
 
         <div class="affirmation-container">
-          <div class="affirmation-content" id="affirmationText" tabindex="0" aria-live="polite"></div>
+          <div class="affirmation-content" id="affirmationText" tabindex="0" aria-live="polite">Welcome — tap <strong>AI ✨</strong> to generate an affirmation.</div>
         </div>
 
         <div class="controls">
@@ -69,6 +78,6 @@
 
   </main>
 
-  <script src="/js/app.js" defer></script>
+  <script src="js/app.js" defer></script>
 </body>
 </html>

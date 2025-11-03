@@ -1,14 +1,14 @@
 /* sw.js - basic cache-first app shell + network-first for external APIs */
 
-const CACHE_NAME = 'daily-aff-shell-v1';
+const CACHE_NAME = 'daily-aff-shell-v2';
 const APP_SHELL = [
-  '/',
-  '/index.html',
-  '/css/styles.css',
-  '/js/app.js',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  './',
+  './index.html',
+  './css/styles.css',
+  './js/app.js',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
 self.addEventListener('install', (e) => {
@@ -31,7 +31,7 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(req.url);
 
   if (req.mode === 'navigate') {
-    e.respondWith(fetch(req).catch(()=>caches.match('/index.html')));
+    e.respondWith(fetch(req).catch(()=>caches.match('./index.html')));
     return;
   }
 
@@ -55,6 +55,6 @@ self.addEventListener('fetch', (e) => {
         try { cache.put(req, res.clone()); } catch(e){}
       });
       return res;
-    })).catch(()=>caches.match('/index.html'))
+    })).catch(()=>caches.match('./index.html'))
   );
 });

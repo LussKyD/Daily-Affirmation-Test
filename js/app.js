@@ -1,6 +1,7 @@
-/* app.js - on-device AI-like affirmation generator + saves + PWA basics */
+/* app.js - updated: corrected paths, theme toggle (light/dark/auto), responsive UI */
 
-const STORAGE_KEY = 'daily-aff-dashboard:saves';
+const STORAGE_KEY = 'daily-aff-dashboard-v2:saves';
+const THEME_KEY = 'daily-aff-theme';
 const DEFAULT_AFFIRMATIONS = [
   "I am capable of amazing things.",
   "Today I choose progress over perfection.",
@@ -26,11 +27,45 @@ const weatherEl = document.getElementById('weather');
 const btnSave = document.getElementById('btn-save');
 const btnGenerate = document.getElementById('btn-generate');
 
+const themeAutoBtn = document.getElementById('themeAuto');
+const themeLightBtn = document.getElementById('themeLight');
+const themeDarkBtn = document.getElementById('themeDark');
+
 let saves = [];
 let pool = [];
 let currentIndex = 0;
 let deferredPrompt = null;
 
+/* ---------- Theme handling ---------- */
+function applyTheme(mode) {
+  if (mode === 'auto') {
+    const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  } else {
+    document.documentElement.setAttribute('data-theme', mode);
+    document.body.setAttribute('data-theme', mode);
+  }
+  themeAutoBtn.setAttribute('aria-pressed', mode === 'auto');
+  themeLightBtn.setAttribute('aria-pressed', mode === 'light');
+  themeDarkBtn.setAttribute('aria-pressed', mode === 'dark');
+  localStorage.setItem(THEME_KEY, mode);
+}
+
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY) || 'auto';
+  applyTheme(saved);
+  if (saved === 'auto' && window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      applyTheme('auto');
+    });
+  }
+}
+themeAutoBtn.addEventListener('click', ()=> applyTheme('auto'));
+themeLightBtn.addEventListener('click', ()=> applyTheme('light'));
+themeDarkBtn.addEventListener('click', ()=> applyTheme('dark'));
+
+/* ---------- Date/time ---------- */
 function now(){ return new Date(); }
 function formatTime(d){ return d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}); }
 function formatDate(d){ return d.toLocaleDateString([], {weekday:'short', month:'short', day:'numeric'}); }
@@ -42,6 +77,7 @@ function updateDateTime(){
 setInterval(updateDateTime, 1000);
 updateDateTime();
 
+/* ---------- Storage ---------- */
 function loadSaves(){
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -52,17 +88,10 @@ function saveSaves(){
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(saves)); } catch(e){}
 }
 
+/* ---------- Affirmation management ---------- */
 function buildPool(){
   pool = [...DEFAULT_AFFIRMATIONS, ...saves];
 }
-
-function showAffirmation(index){
-  if (!pool.length) return;
-  currentIndex = ((index % pool.length) + pool.length) % pool.length;
-  const text = pool[currentIndex];
-  animateText(text);
-}
-
 function animateText(text){
   affirmationTextEl.style.opacity = 0;
   affirmationTextEl.style.transform = 'translateY(6px)';
@@ -73,34 +102,35 @@ function animateText(text){
     affirmationTextEl.style.transform = 'translateY(0)';
   }, 120);
 }
-
+function showAffirmation(index){
+  if (!pool.length) return;
+  currentIndex = ((index % pool.length) + pool.length) % pool.length;
+  const text = pool[currentIndex];
+  animateText(text);
+}
 function showNext(){ showAffirmation(currentIndex + 1); }
 function showPrev(){ showAffirmation(currentIndex - 1); }
 function showRandom(){ showAffirmation(Math.floor(Math.random() * pool.length)); }
 
-/* On-device AI-like generator:
-   Combines subject / trait / action templates with small randomization.
-   This is deterministic and works offline; it's a lightweight "AI" that feels generative.
-*/
+/* On-device AI-like generator */
 const SUBJECTS = ["You", "I", "We", "This moment", "Your heart"];
-const TRAITS = ["are capable", "are enough", "deserve rest", "are growing", "bring light"];
+const TRAITS = ["are capable", "are enough", "deserve rest", "are growing", "bring light", "are resilient"];
 const ADVERBS = ["today", "right now", "with ease", "without apology", "gently"];
 const COMPLEMENTS = [
   "to create what you imagine.",
   "and attract good things.",
   "and learn with grace.",
   "and breathe deeply.",
-  "and take one small step forward."
+  "and take one small step forward.",
+  "and rebuild with kindness."
 ];
 
 function generateAffirmation(seedText=''){
-  // Optionally use seed words from user's input to bias generation
   const s = SUBJECTS[Math.floor(Math.random()*SUBJECTS.length)];
   const t = TRAITS[Math.floor(Math.random()*TRAITS.length)];
   const a = ADVERBS[Math.floor(Math.random()*ADVERBS.length)];
   const c = COMPLEMENTS[Math.floor(Math.random()*COMPLEMENTS.length)];
   const parts = [`${s} ${t} ${a}`, c];
-  // If seed present, weave it naturally:
   if (seedText && Math.random() > 0.3) {
     const cleaned = seedText.trim().split(' ').slice(0,3).join(' ');
     parts.unshift(`${cleaned},`);
@@ -108,7 +138,7 @@ function generateAffirmation(seedText=''){
   return parts.join(' ');
 }
 
-/* Render saved list */
+/* ---------- Saved list UI ---------- */
 function renderSavedList(){
   savedList.innerHTML = '';
   if (!saves.length) {
@@ -133,15 +163,14 @@ function renderSavedList(){
     delBtn.addEventListener('click', ()=> {
       saves.splice(i,1); saveSaves(); buildPool(); renderSavedList();
     });
-    div.appendChild(span);
     const actions = document.createElement('div');
     actions.appendChild(useBtn); actions.appendChild(delBtn);
-    div.appendChild(actions);
+    div.appendChild(span); div.appendChild(actions);
     savedList.appendChild(div);
   });
 }
 
-/* UI interactions */
+/* ---------- UI interactions ---------- */
 document.getElementById('btn-next').addEventListener('click', showNext);
 document.getElementById('btn-prev').addEventListener('click', showPrev);
 document.getElementById('btn-random').addEventListener('click', showRandom);
@@ -180,13 +209,13 @@ addForm.addEventListener('submit', (e)=> {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async ()=> {
     try {
-      await navigator.serviceWorker.register('/sw.js');
+      await navigator.serviceWorker.register('sw.js');
       console.log('sw registered');
     } catch(e){ console.warn('sw failed', e); }
   });
 }
 
-/* beforeinstallprompt handling */
+/* install prompt handling */
 window.addEventListener('beforeinstallprompt', (e)=> {
   e.preventDefault();
   deferredPrompt = e;
@@ -205,22 +234,19 @@ document.getElementById('btn-dismiss-install').addEventListener('click', ()=> {
   document.getElementById('installPrompt').classList.add('hidden');
 });
 
-/* Optional simple weather via IP lookup (graceful offline fallback) */
+/* Optional weather via IP */
 async function fetchWeather() {
   try {
-    // free IP-api; if blocked or offline, will fail silently
     const r = await fetch('https://ipapi.co/json/');
     if (!r.ok) return;
     const d = await r.json();
-    if (d && d.city) {
-      // Try openweathermap only if API key provided by user later
-      weatherEl.textContent = `${d.city}`;
-    }
-  } catch(e) { console.warn('weather fetch failed', e); }
+    if (d && d.city) weatherEl.textContent = `${d.city}`;
+  } catch(e){}
 }
 
 /* Init */
 function init(){
+  initTheme();
   loadSaves();
   buildPool();
   renderSavedList();
@@ -229,7 +255,7 @@ function init(){
 }
 init();
 
-/* keyboard */
+/* keyboard shortcuts */
 document.addEventListener('keydown', (e)=> {
   if (e.key === 'ArrowRight') showNext();
   if (e.key === 'ArrowLeft') showPrev();
