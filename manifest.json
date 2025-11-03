@@ -4,9 +4,9 @@
   "start_url": "/?source=pwa",
   "display": "standalone",
   "scope": "/",
-  "background_color": "#ffffff",
-  "theme_color": "#0c4aff",
-  "description": "Minimal daily affirmations. Works offline. Add to Home Screen for Android.",
+  "background_color": "#071026",
+  "theme_color": "#0b1220",
+  "description": "Minimal daily affirmations. Works offline. Add to Home Screen.",
   "icons": [
     {
       "src": "/icons/icon-192.png",
