@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Daily Affirmation Dashboard — minimal, offline-ready, and uplifting." />
+  <title>Daily Affirmation Dashboard</title>
+
+  <!-- Manifest & theme -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" href="/icons/icon-192.png" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <!-- Critical inline script: small check for add-to-home handling (keeps app fast). -->
+  <script>
+    // Minimal early hook to avoid render issues on some browsers
+    if (window.location.protocol === 'file:') {
+      // When testing locally via file, some features won't work; continue gracefully.
+      console.warn('File protocol: some PWA features will be limited.');
+    }
+  </script>
+</head>
+<body>
+  <main id="app" class="app" role="main" aria-live="polite">
+    <header class="topbar" role="banner">
+      <div class="date-time" id="dateTime" aria-hidden="false"></div>
+      <button id="btn-save" class="icon-btn" title="Save current affirmation">★ Save</button>
+    </header>
+
+    <section class="card" id="affirmationCard" aria-labelledby="affirmationHeading">
+      <h1 id="affirmationHeading" class="sr-only">Daily Affirmation</h1>
+
+      <div class="affirmation-content" id="affirmationText" tabindex="0"></div>
+
+      <div class="controls">
+        <button id="btn-next" class="primary">Next</button>
+        <button id="btn-random" class="ghost" title="Surprise me">Surprise</button>
+        <button id="btn-add-toggle" class="ghost" aria-expanded="false">Add</button>
+      </div>
+
+      <form id="addForm" class="hidden" aria-hidden="true">
+        <label for="newAffirmation" class="visually-hidden">New affirmation</label>
+        <textarea id="newAffirmation" placeholder="Type your affirmation..." rows="3" required></textarea>
+        <div class="form-actions">
+          <button type="submit" class="primary">Add</button>
+          <button type="button" id="btn-cancel" class="ghost">Cancel</button>
+        </div>
+      </form>
+
+      <div id="savedList" class="saved-list" aria-live="polite"></div>
+    </section>
+
+    <footer class="footer">
+      <div id="weather" class="weather" role="status" aria-live="polite"></div>
+      <div class="progress-note">Made with care • Offline-ready PWA</div>
+    </footer>
+
+    <!-- Install prompt UI -->
+    <div id="installPrompt" class="install-prompt hidden" role="dialog" aria-hidden="true">
+      <p>Install Daily Affirmation to your device for quick access and offline support.</p>
+      <div class="install-actions">
+        <button id="btn-install" class="primary">Install</button>
+        <button id="btn-dismiss-install" class="ghost">No thanks</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/app.js" defer></script>
+</body>
+</html>
