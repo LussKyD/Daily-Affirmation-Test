@@ -1,22 +1,12 @@
-{
-  "name": "Affirm.",
-  "short_name": "Affirm",
-  "start_url": "./?source=pwa",
-  "display": "standalone",
-  "scope": "./",
-  "background_color": "#020317",
-  "theme_color": "#071026",
-  "description": "Affirm. Daily affirmations by DRACO iNC Techs",
-  "icons": [
-    {
-      "src": "icons/affirm-glass-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/affirm-glass-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
+"icons": [
+  {
+    "src": "icons/affirm-glass-192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  },
+  {
+    "src": "icons/affirm-glass-512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+]
