@@ -553,6 +553,12 @@
       return;
     }
 
+    // While consent is showing, keep install prompt hidden
+    if (el.installPrompt) {
+      el.installPrompt.classList.add('hidden');
+      el.installPrompt.setAttribute('aria-hidden', 'true');
+    }
+
     el.consentBanner.classList.remove('hidden');
     el.consentBanner.setAttribute('aria-hidden', 'false');
 
@@ -563,6 +569,8 @@
         el.consentBanner.setAttribute('aria-hidden', 'true');
       }
       track('consent_accept', {});
+      // If install prompt is available, show it only after consent
+      maybeShowInstallPrompt();
     });
 
     el.consentDecline.addEventListener('click', function () {
@@ -572,10 +580,32 @@
         el.consentBanner.setAttribute('aria-hidden', 'true');
       }
       track('consent_decline', {});
+      // If install prompt is available, show it only after consent
+      maybeShowInstallPrompt();
     });
   }
 
   // --- Install prompt ----------------------------------------------------
+
+  function maybeShowInstallPrompt() {
+    if (!el.installPrompt) return;
+    if (!state.installPromptEvent) return;
+
+    const dismissed = safeLocalStorageGet(
+      STORAGE_KEYS.installDismissed
+    );
+    if (dismissed === 'true') return;
+
+    // Do not stack with consent banner
+    if (el.consentBanner && !el.consentBanner.classList.contains('hidden')) {
+      return;
+    }
+
+    el.installPrompt.classList.remove('hidden');
+    el.installPrompt.setAttribute('aria-hidden', 'false');
+
+    track('install_prompt_shown', {});
+  }
 
   function initInstallPrompt() {
     if (!el.installPrompt) return;
@@ -587,15 +617,12 @@
       event.preventDefault();
       state.installPromptEvent = event;
 
-      const dismissed = safeLocalStorageGet(
-        STORAGE_KEYS.installDismissed
-      );
-      if (dismissed === 'true') return;
+      // If consent is not yet resolved, wait until it is handled
+      if (!state.consent) {
+        return;
+      }
 
-      el.installPrompt.classList.remove('hidden');
-      el.installPrompt.setAttribute('aria-hidden', 'false');
-
-      track('install_prompt_shown', {});
+      maybeShowInstallPrompt();
     });
 
     if (el.btnInstall) {
