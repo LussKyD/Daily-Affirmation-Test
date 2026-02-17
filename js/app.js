@@ -741,7 +741,7 @@
     initialRender();
     startClock();
 
-    setTimeout(hideSplash, 1300);
+    setTimeout(hideSplash, 550);
     startStarEmitter();
     registerServiceWorker();
 
