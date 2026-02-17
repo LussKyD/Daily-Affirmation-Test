@@ -531,6 +531,18 @@
     renderAffirmation();
   }
 
+  // --- Focus (fix aria-hidden + focused descendant) ----------------------
+
+  function moveFocusOutOf(elContainer) {
+    if (!elContainer || !elContainer.contains(document.activeElement)) return;
+    var target = el.app && (el.btnGenerate || el.btnNext || el.affirmationText);
+    if (target && typeof target.focus === 'function') {
+      target.focus();
+    } else {
+      document.body.focus();
+    }
+  }
+
   // --- Consent banner ----------------------------------------------------
 
   function initConsent() {
@@ -565,22 +577,22 @@
     el.consentAccept.addEventListener('click', function () {
       setAnalyticsConsent(CONSENT_VALUES.accepted);
       if (el.consentBanner) {
+        moveFocusOutOf(el.consentBanner);
         el.consentBanner.classList.add('hidden');
         el.consentBanner.setAttribute('aria-hidden', 'true');
       }
       track('consent_accept', {});
-      // If install prompt is available, show it only after consent
       maybeShowInstallPrompt();
     });
 
     el.consentDecline.addEventListener('click', function () {
       setAnalyticsConsent(CONSENT_VALUES.declined);
       if (el.consentBanner) {
+        moveFocusOutOf(el.consentBanner);
         el.consentBanner.classList.add('hidden');
         el.consentBanner.setAttribute('aria-hidden', 'true');
       }
       track('consent_decline', {});
-      // If install prompt is available, show it only after consent
       maybeShowInstallPrompt();
     });
   }
@@ -635,6 +647,7 @@
           track('install_choice', { outcome: choice.outcome });
         });
 
+        moveFocusOutOf(el.installPrompt);
         el.installPrompt.classList.add('hidden');
         el.installPrompt.setAttribute('aria-hidden', 'true');
         state.installPromptEvent = null;
@@ -643,6 +656,7 @@
 
     if (el.btnDismissInstall) {
       el.btnDismissInstall.addEventListener('click', function () {
+        moveFocusOutOf(el.installPrompt);
         el.installPrompt.classList.add('hidden');
         el.installPrompt.setAttribute('aria-hidden', 'true');
         safeLocalStorageSet(STORAGE_KEYS.installDismissed, 'true');
